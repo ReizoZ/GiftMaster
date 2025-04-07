@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Giveaway Summary Page">
+    <meta name="author" content="ReizoZ">
+    <meta name="keywords" content="giveaway, summary, winners, entrants">
+    <meta name="theme-color" content="#6a11cb">
+    <link rel="icon" href={{ giveaway.host.avatar }} type="image/x-icon">
+    <title>Giveaway Summary</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        .summary-card {
+            max-width: 900px;
+            margin: 40px auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .summary-header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 35px 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: center/cover;
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .summary-header * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .host-avatar-large {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: block;
+            border: 5px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        
+
+        .summary-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .summary-body {
+            padding: 35px;
+        }
+
+        .summary-section {
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .summary-section h2 {
+            color: #2575fc;
+            margin-bottom: 20px;
+            font-size: 1.6rem;
+            border-bottom: 2px solid #eef2f7;
+            padding-bottom: 10px;
+            display: inline-block;
+            position: relative;
+        }
+
+        .summary-section h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -2px;
+            width: 50%;
+            height: 2px;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+        }
+
+        .prize-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .prize-item {
+            background-color: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            width: calc(50% - 10px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #eef2f7;
+        }
+
+
+        .prize-item h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .date-info {
+            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+
+        .date-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .date-label {
+            font-weight: 600;
+            color: #0277bd;
+            font-size: 1.05rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #43a047, #1de9b6);
+            color: white;
+            box-shadow: 0 3px 8px rgba(29, 233, 182, 0.3);
+        }
+
+        .host-info {
+            display: flex;
+            align-items: center;
+            background-color: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border: 1px solid #eef2f7;
+            transition: transform 0.3s ease;
+        }
+
+
+
+        .host-logo {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            margin-right: 20px;
+            overflow: hidden;
+            border: 3px solid #eef2f7;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .host-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+
+        .host-details h3 {
+            margin-bottom: 5px;
+            color: #333;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .people-list {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .person-card {
+            background-color: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border: 1px solid #eef2f7;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+
+        .person-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            overflow: hidden;
+            border: 2px solid #eef2f7;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+        
+        .person-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+
+
+        .person-info h4 {
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        .person-info p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .winner-badge {
+            background: linear-gradient(135deg, #ffd54f, #ffb300);
+            color: #333;
+            border-radius: 6px;
+            padding: 3px 10px;
+            font-size: 0.75rem;
+            margin-left: 10px;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(255, 179, 0, 0.3);
+            display: flex;
+            align-items: center;
+        }
+
+        .winner-badge i {
+            margin-right: 4px;
+            font-size: 0.8rem;
+        }
+
+        footer {
+            text-align: center;
+            margin: 40px auto 20px;
+            color: #555;
+            font-size: 0.95rem;
+            max-width: 900px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            backdrop-filter: blur(5px);
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            flex: 1;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            border-radius: 12px;
+            padding: 25px 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+            border: 1px solid #eef2f7;
+            position: relative;
+            overflow: hidden;
+        }
+
+
+        .stat-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+        }
+
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #2575fc;
+            margin-bottom: 8px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .stat-icon {
+            font-size: 1.5rem;
+            color: rgba(37, 117, 252, 0.2);
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .summary-card {
+                margin: 20px auto;
+            }
+            
+            .summary-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .prize-item {
+                width: 100%;
+            }
+            
+            .date-row {
+                flex-direction: column;
+                align-items: flex-start;
+                margin-bottom: 15px;
+            }
+            
+            .stats-row {
+                flex-direction: column;
+            }
+            
+            .people-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .host-avatar-large {
+                width: 100px;
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="summary-card">
+        <div class="summary-header">
+            <img class="host-avatar-large" src="{{ giveaway.host.avatar or '/api/placeholder/140/140' }}" alt="Host Avatar">
+            <h1>{{ giveaway.title }}</h1>
+            <div class="host-info-header">
+                <h3 style="color: rgba(255, 255, 255, 0.85); font-size: 1.2rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px;">Hosted by</h3>
+                <p style="color: white; font-size: 1.5rem; font-weight: 600;">{{ giveaway.host.display_name }}</p>
+            </div>
+        </div>
+
+        <div class="summary-body">
+            <div class="summary-section">
+                <h2>Overview</h2>
+                <div class="date-info">
+                    <div class="date-row">
+                        <span class="date-label"><i class="fas fa-calendar-alt" style="margin-right: 8px;"></i>Duration:</span>
+                        <span style="font-weight: 500;">{{ giveaway.duration }}</span>
+                    </div>
+                </div>
+                <div class="stats-row">
+                    <div class="stat-box">
+                        <div class="stat-number">{{ giveaway.participants }}</div>
+                        <div class="stat-label">Participants</div>
+                        <i class="fas fa-users stat-icon"></i>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">{{ giveaway.winner_count }}</div>
+                        <div class="stat-label">Winners</div>
+                        <i class="fas fa-trophy stat-icon"></i>
+                    </div>
+                </div>
+            </div>
+            {% if giveaway.description %}
+            <div class="summary-section">
+                <h2>Prize Information</h2>
+                <div class="prize-list">
+                    <div class="prize-item">  
+                            <h3><i class="fas fa-gift" style="margin-right: 10px; color: #6a11cb;"></i>Prize Details</h3>
+                            <p>{{ giveaway.description }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+
+            <div class="summary-section">
+                <h2>Winners</h2>
+                {% if winners %}
+                    <div class="people-list">
+                        {% for winner in winners %}
+                        <div class="person-card">
+                            <div class="person-avatar">
+                                <img src="{{ winner.avatar or '/api/placeholder/50/50' }}" alt="Winner">
+                            </div>
+                            <div class="person-info">
+                                <h4>{{ winner.display_name }} <span class="winner-badge"><i class="fas fa-crown"></i> Winner</span></h4>
+                                {% if winner.joined_at %}
+                                <p><i class="fas fa-user-clock" style="margin-right: 5px; color: #6a11cb;"></i>Joined {{ winner.joined_at }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p style="padding: 20px; background-color: #f5f7fa; border-radius: 12px; text-align: center; border: 1px dashed #ccc;">
+                        <i class="fas fa-hourglass-half" style="margin-right: 10px; color: #6a11cb;"></i>
+                        Winners will be selected and displayed here when available.
+                    </p>
+                {% endif %}
+            </div>
+
+            <div class="summary-section">
+                <h2>Entrants</h2>
+                <div class="people-list">
+                    {% for entrant in entrants %}
+                    <div class="person-card">
+                        <div class="person-avatar">
+                            <img src="{{ entrant.avatar or '/api/placeholder/50/50' }}" alt="Entrant">
+                        </div>
+                        <div class="person-info">
+                            <h4>{{ entrant.display_name or entrant.username }}</h4>
+                            {% if entrant.joined_at %}
+                            <p><i class="fas fa-user-clock" style="margin-right: 5px; color: #6a11cb;"></i>Joined {{ entrant.joined_at }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
+    <script>
+    kofiWidgetOverlay.draw('reizoz', {
+        'type': 'floating-chat',
+        'floating-chat.donateButton.text': 'Support me',
+        'floating-chat.donateButton.background-color': '#00b9fe',
+        'floating-chat.donateButton.text-color': '#fff'
+    });
+    </script>
+
+    <footer>
+        <p>© 2025 Premium Giveaway. All rights reserved.</p>
+        <p style="margin-top: 10px; font-size: 0.8rem; color: #999;">Developed by <a href="https://github.com/ReizoZ" target="_blank" style="color: #6a11cb; text-decoration: none;">ReizoZ</a></p>
+    </footer>
+</body>
+</html>
