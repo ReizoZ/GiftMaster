@@ -1,7 +1,11 @@
 # Discord Giveaway Bot
 ![Image](https://github.com/user-attachments/assets/839e5942-739f-4b12-a88e-48a8d0b3501a)
 
+<div style="text-align: center;">
+
 [![GitHub](https://img.shields.io/badge/GitHub-ReizoZ-blue?style=flat-square&logo=github)](https://github.com/ReizoZ) [![Ko-fi](https://img.shields.io/badge/Ko--fi-ReizoZ-ff5e5b?style=flat-square&logo=ko-fi)](https://ko-fi.com/E1E41CVWBU) [![Discord](https://img.shields.io/badge/Discord-Invite%20Bot-%235865F2?style=flat-square&logo=discord)](https://discord.com/oauth2/authorize?client_id=1358819912445067370&permissions=1689934340028480&integration_type=0&scope=bot)
+
+</div>
 
 A comprehensive Discord bot for creating, managing, and participating in giveaways within your server, featuring an interactive interface and a web view for giveaway summaries.
 
